@@ -97,6 +97,35 @@ SwerveDrive  swerveDrive;
     // This method will be called once per scheduler run during simulation
   }
 
+  public void ResetOdometry(Pose2d initialHolonomicPose){
+    swerveDrive.resetOdometry(initialHolonomicPose);
+
+  }
+
+  public Pose2d getPose(){
+    return swerveDrive.getPose();
+  }
+
+  public void ZeroGyro(){
+    swerveDrive.zeroGyro();
+  }
+
+  private boolean isRedAlliance(){
+    var alliance = DriverStation.getAlliance();
+    return alliance.isPresent() ? alliance.get() == DriverStation.Alliance.Red : false;
+  }
+
+  public void ZeroGyroWithAlliance(){
+
+     if (isRedAlliance()) {
+      ZeroGyro(); 
+      ResetOdometry(
+        new Pose2d(getPose().getTranslation(), Rotation2d.fromDegrees(180)));
+       }
+       else{
+        ZeroGyro();
+      }
+  }
   
 
    public void setupPathPlanner()

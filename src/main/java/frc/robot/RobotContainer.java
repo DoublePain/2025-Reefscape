@@ -18,11 +18,14 @@ import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import swervelib.SwerveInputStream;
 
+import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
 import au.grapplerobotics.CanBridge;
+import choreo.auto.AutoChooser;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -44,7 +47,7 @@ public class RobotContainer {
   
   private final AlgaeSubsystem m_algaeSubsystem = new AlgaeSubsystem();
 
-
+  private final SendableChooser<Command> autoChooser;
   private final CommandXboxController m_driverController = new CommandXboxController(OperatorConstants.kDriverControllerPort);
   private final CommandXboxController m_driverController2 = new CommandXboxController(OperatorConstants.kDriverControllerPort2);
 
@@ -112,11 +115,13 @@ public class RobotContainer {
     NamedCommands.registerCommand("Stop coral", new StopCoralCommand(m_coralSubsystem));
     NamedCommands.registerCommand("Grab algae", new GrabAlgaeCommand(m_algaeSubsystem));
     NamedCommands.registerCommand("Stop algae", new StopAlgaeCommand(m_algaeSubsystem));
-    NamedCommands.registerCommand("Stop coral", new StopCoralCommand(m_coralSubsystem));
-    NamedCommands.registerCommand("Stow algae", new StowCommand(m_algaeSubsystem));
-    NamedCommands.registerCommand("Score L1", new ScoreCoralCommand(m_coralSubsystem, false));
-    NamedCommands.registerCommand("Score high", new ScoreCoralCommand(m_coralSubsystem, true));
     */
+    NamedCommands.registerCommand("StopCoral", new StopCoralCommand(m_coralSubsystem));
+  //  NamedCommands.registerCommand("Stow algae", new StowCommand(m_algaeSubsystem));
+    NamedCommands.registerCommand("ScoreL1", new ScoreCoralCommand(m_coralSubsystem, false));
+   // NamedCommands.registerCommand("Score high", new ScoreCoralCommand(m_coralSubsystem, true));
+    autoChooser = AutoBuilder.buildAutoChooser();
+    SmartDashboard.putData("auto Chooser", autoChooser);
 
     CanBridge.runTCP();
 
@@ -205,6 +210,6 @@ public class RobotContainer {
 
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return drivebase.getAutonomousCommand("MID");
+    return drivebase.getAutonomousCommand("MID RED");
   }
 }
